@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Editor</title>
+<style>
+    .editor-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .editor {
+        min-height: 200px;
+        padding: 10px;
+        resize: vertical;
+        overflow-y: auto;
+        border: none;
+        outline: none;
+    }
+
+    .editor-toolbar {
+        display: flex;
+        background-color: #f3f3f3;
+        border-bottom: 1px solid #ccc;
+        border-radius: 5px 5px 0 0;
+        padding: 5px;
+    }
+
+    .editor-toolbar button, .editor-toolbar select {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 5px;
+        margin-right: 5px;
+    }
+
+    .editor-toolbar button:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+</head>
+<body>
+<form id="myForm">
+    <div class="editor-toolbar">
+        <button type="button" onclick="execCommand('bold')"><b>B</b></button>
+        <button type="button" onclick="execCommand('italic')"><i>I</i></button>
+        <button type="button" onclick="execCommand('underline')"><u>U</u></button>
+        <button type="button" onclick="execCommand('insertUnorderedList')">&#8226;</button>
+        <button type="button" onclick="execCommand('insertOrderedList')">1.</button>
+        <select onchange="changeFontSize(this.value)">
+            <option value="">Font Size</option>
+            <option value="1">8pt</option>
+            <option value="2">10pt</option>
+            <option value="3">12pt</option>
+            <option value="4">14pt</option>
+            <option value="5">16pt</option>
+            <option value="6">18pt</option>
+            <option value="7">20pt</option>
+        </select>
+        <button type="button" onclick="createLink()">Link</button>
+        <button type="button" onclick="insertImage()">Image</button>
+    </div>
+    <div class="editor-container">
+        <div id="editor" contenteditable="true" class="editor" spellcheck="false"></div>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    const editor = document.getElementById('editor');
+
+    function execCommand(command) {
+        document.execCommand(command);
+    }
+
+    function createLink() {
+        const url = prompt('Enter the URL:');
+        if (url) {
+            execCommand('createLink', url);
+        }
+    }
+
+    function insertImage() {
+        const url = prompt('Enter the image URL:');
+        if (url) {
+            execCommand('insertImage', url);
+        }
+    }
+
+    function changeFontSize(size) {
+        document.execCommand('fontSize', false, size);
+    }
+
+    function getEditorContent() {
+        return editor.innerHTML;
+    }
+
+    function setEditorContent(content) {
+        editor.innerHTML = content;
+    }
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        const textarea = document.createElement('textarea');
+        textarea.name = 'content';
+        textarea.value = getEditorContent();
+        document.getElementById('myForm').appendChild(textarea);
+    });
+</script>
+</body>
+</html>

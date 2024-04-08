@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Editor</title>
+<style>
+    .editor-container {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .editor {
+        min-height: 200px;
+        padding: 10px;
+        resize: vertical;
+        overflow-y: auto;
+        border: none;
+        outline: none;
+    }
+
+    .editor-toolbar {
+        display: flex;
+        background-color: #f3f3f3;
+        border-bottom: 1px solid #ccc;
+        border-radius: 5px 5px 0 0;
+        padding: 5px;
+    }
+
+    .editor-toolbar button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 5px;
+        margin-right: 5px;
+    }
+
+    .editor-toolbar button:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+</head>
+<body>
+<form id="myForm">
+    <div class="editor-toolbar">
+        <button type="button" onclick="execCommand('bold')"><b>B</b></button>
+        <button type="button" onclick="execCommand('italic')"><i>I</i></button>
+        <button type="button" onclick="execCommand('underline')"><u>U</u></button>
+        <button type="button" onclick="execCommand('insertUnorderedList')">&#8226;</button>
+        <button type="button" onclick="execCommand('insertOrderedList')">1.</button>
+        <button type="button" onclick="createLink()">Link</button>
+        <button type="button" onclick="insertImage()">Image</button>
+    </div>
+    <div class="editor-container">
+        <div id="editor" contenteditable="true" class="editor" spellcheck="false"></div>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    const editor = document.getElementById('editor');
+
+    // Function to execute commands on the editor
+    function execCommand(command) {
+        document.execCommand(command);
+    }
+
+    // Function to insert a link
+    function createLink() {
+        const url = prompt('Enter the URL:');
+        if (url) {
+            execCommand('createLink', url);
+        }
+    }
+
+    // Function to insert an image
+    function insertImage() {
+        const url = prompt('Enter the image URL:');
+        if (url) {
+            execCommand('insertImage', url);
+        }
+    }
+
+    // Function to get the content of the editor
+    function getEditorContent() {
+        return editor.innerHTML;
+    }
+
+    // Function to set the content of the editor
+    function setEditorContent(content) {
+        editor.innerHTML = content;
+    }
+
+    // Event listener to update the hidden textarea on form submission
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        const textarea = document.createElement('textarea');
+        textarea.name = 'content';
+        textarea.value = getEditorContent();
+        document.getElementById('myForm').appendChild(textarea);
+    });
+</script>
+</body>
+</html>
